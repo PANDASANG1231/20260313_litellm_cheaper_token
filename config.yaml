@@ -1,0 +1,39 @@
+# LiteLLM config for Claude Code — cheap token + GLM fallback
+# Usage: litellm --config config.yaml
+#
+# Claude primary (API 付费) + 智谱 GLM fallback (rate limit / 429 时自动切换)
+#
+# 若 claude/* 不生效，改用显式 model_name，如 claude-haiku-4-5-20251001
+
+model_list:
+  # Claude 系列 — 主模型，必须填 ANTHROPIC_API_KEY
+  - model_name: claude/*
+    litellm_params:
+      model: anthropic/*
+      api_key: os.environ/ANTHROPIC_API_KEY
+
+  # 智谱 GLM 系列 — fallback，匹配 glm- 开头的所有模型
+  - model_name: glm/glm-4.7
+    litellm_params:
+      model: openai/glm-4.7
+      api_base: https://open.bigmodel.cn/api/paas/v4
+      api_key: os.environ/ZHIPU_API_KEY
+
+  - model_name: glm/glm-4.6
+    litellm_params:
+      model: openai/glm-4.6
+      api_base: https://open.bigmodel.cn/api/paas/v4
+      api_key: os.environ/ZHIPU_API_KEY
+
+litellm_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  fallbacks:
+    - {"claude/*": ["glm/glm-4.7", "glm/glm-4.6"]}
+  num_retries: 2
+  retry_after: 60
+  request_timeout: 600
+  allowed_fails: 3
+  cooldown_time: 60
+
+router_settings:
+  enable_pre_call_checks: true
