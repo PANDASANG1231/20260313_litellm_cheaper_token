@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod +x /Users/pandasang/Desktop/toolkit/20260313_litellm_cheaper_token/switch.sh)",
+      "Bash(mv /Users/pandasang/.claude/settings.zhipu.json /Users/pandasang/Desktop/toolkit/20260313_litellm_cheaper_token/settings.zhipu.json)",
+      "Bash(cp /Users/pandasang/.claude/settings.json /Users/pandasang/Desktop/toolkit/20260313_litellm_cheaper_token/settings.default.json)",
+      "Bash(./switch.sh zhipu:*)",
+      "Bash(./switch.sh default:*)",
+      "Bash(./switch.sh status:*)",
+      "Bash(python3 -c \"import json; d=json.load\\(open\\(''/Users/pandasang/.claude/settings.json''\\)\\); print\\(json.dumps\\(d[''env''], indent=2\\)\\)\")"
+    ],
+    "additionalDirectories": [
+      "/Users/pandasang/.claude"
+    ]
+  }
+}
