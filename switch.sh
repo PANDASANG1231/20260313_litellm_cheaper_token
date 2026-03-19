@@ -35,25 +35,10 @@ with open('$SETTINGS', 'w') as f:
 
 start_litellm() {
   local config="$1"
-  # 停掉旧进程
   stop_litellm silent
-
   cd "$SCRIPT_DIR"
   set -a; source .env; set +a
-  nohup litellm --config "$config" > "$LITELLM_LOG" 2>&1 &
-  echo $! > "$LITELLM_PID_FILE"
-
-  # 等待启动
-  local i=0
-  while [ $i -lt 10 ]; do
-    sleep 1
-    if grep -q "Application startup complete" "$LITELLM_LOG" 2>/dev/null; then
-      echo "✓ LiteLLM 已启动 (pid=$(cat $LITELLM_PID_FILE)，端口 4000)"
-      return 0
-    fi
-    i=$((i+1))
-  done
-  echo "⚠ LiteLLM 启动超时，请检查日志：$LITELLM_LOG"
+  litellm --config "$config"
 }
 
 stop_litellm() {
